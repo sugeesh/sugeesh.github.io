@@ -19,8 +19,6 @@ sidebarBtn.addEventListener("click", function () { elementToggleFunc(sidebar); }
 // testimonials variables
 const testimonialsItem = document.querySelectorAll("[data-testimonials-item]");
 const modalContainer = document.querySelector("[data-modal-container]");
-const modalCloseBtn = document.querySelector("[data-modal-close-btn]");
-const overlay = document.querySelector("[data-overlay]");
 
 // modal variable
 const modalImg = document.querySelector("[data-modal-img]");
@@ -30,7 +28,7 @@ const modalText = document.querySelector("[data-modal-text]");
 // modal toggle function
 const testimonialsModalFunc = function () {
   modalContainer.classList.toggle("active");
-  overlay.classList.toggle("active");
+
 }
 
 // add click event to all modal items
@@ -48,11 +46,6 @@ for (let i = 0; i < testimonialsItem.length; i++) {
   });
 
 }
-
-// add click event to modal close button
-modalCloseBtn.addEventListener("click", testimonialsModalFunc);
-overlay.addEventListener("click", testimonialsModalFunc);
-
 
 
 // custom select variables
