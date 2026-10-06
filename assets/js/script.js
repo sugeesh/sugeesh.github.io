@@ -1,152 +1,193 @@
 'use strict';
 
+const GARDEN_URL = "https://garden.sugeesh.dev";
+const SECTION_NAMES = {
+  "journal": "Journal",
+  "study-sessions": "Study Sessions",
+  "experiments": "Experiments",
+  "library": "Library",
+  "random-thoughts": "Random Thoughts"
+};
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 
-// element toggle function
-const elementToggleFunc = function (elem) { elem.classList.toggle("active"); }
-
-
-
-// sidebar variables
+/*
+ * sidebar toggle (mobile)
+ */
 const sidebar = document.querySelector("[data-sidebar]");
-const sidebarBtn = document.querySelector("[data-sidebar-btn]");
-
-// sidebar toggle functionality for mobile
-sidebarBtn.addEventListener("click", function () { elementToggleFunc(sidebar); });
-
+document.querySelector("[data-sidebar-btn]").addEventListener("click", function () {
+  sidebar.classList.toggle("active");
+});
 
 
-// testimonials variables
-const testimonialsItem = document.querySelectorAll("[data-testimonials-item]");
-const modalContainer = document.querySelector("[data-modal-container]");
+/*
+ * page navigation — any element with data-nav-link="<page>" switches pages
+ */
+const pages = document.querySelectorAll("[data-page]");
+const navbarLinks = document.querySelectorAll(".navbar-link[data-nav-link]");
 
-// modal variable
-const modalImg = document.querySelector("[data-modal-img]");
-const modalTitle = document.querySelector("[data-modal-title]");
-const modalText = document.querySelector("[data-modal-text]");
+const showPage = function (name, push) {
+  if (![...pages].some(p => p.dataset.page === name)) name = "about";
 
-// modal toggle function
-const testimonialsModalFunc = function () {
-  modalContainer.classList.toggle("active");
+  pages.forEach(p => p.classList.toggle("active", p.dataset.page === name));
+  navbarLinks.forEach(l => l.classList.toggle("active", l.dataset.navLink === name));
 
-}
+  if (push) {
+    history.replaceState(null, "", name === "about" ? location.pathname : "#" + name);
+    window.scrollTo(0, 0);
+  }
+};
 
-// add click event to all modal items
-for (let i = 0; i < testimonialsItem.length; i++) {
+document.querySelectorAll("[data-nav-link]").forEach(el => {
+  el.addEventListener("click", () => showPage(el.dataset.navLink, true));
+});
 
-  testimonialsItem[i].addEventListener("click", function () {
-
-    modalImg.src = this.querySelector("[data-testimonials-avatar]").src;
-    modalImg.alt = this.querySelector("[data-testimonials-avatar]").alt;
-    modalTitle.innerHTML = this.querySelector("[data-testimonials-title]").innerHTML;
-    modalText.innerHTML = this.querySelector("[data-testimonials-text]").innerHTML;
-
-    testimonialsModalFunc();
-
-  });
-
-}
+showPage(location.hash.slice(1), false);
+window.addEventListener("hashchange", () => showPage(location.hash.slice(1), false));
 
 
-// custom select variables
-const select = document.querySelector("[data-select]");
-const selectItems = document.querySelectorAll("[data-select-item]");
-const selectValue = document.querySelector("[data-selecct-value]");
-const filterBtn = document.querySelectorAll("[data-filter-btn]");
+/*
+ * starfield — same generator as the greenhouse and Ask Holocron
+ */
+(function () {
+  const host = document.querySelector("[data-stars]");
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  const count = Math.min(160, Math.round((w * h) / 9000));
+  const frag = document.createDocumentFragment();
 
-select.addEventListener("click", function () { elementToggleFunc(this); });
-
-// add event in all select items
-for (let i = 0; i < selectItems.length; i++) {
-  selectItems[i].addEventListener("click", function () {
-
-    let selectedValue = this.innerText.toLowerCase();
-    selectValue.innerText = this.innerText;
-    elementToggleFunc(select);
-    filterFunc(selectedValue);
-
-  });
-}
-
-// filter variables
-const filterItems = document.querySelectorAll("[data-filter-item]");
-
-const filterFunc = function (selectedValue) {
-
-  for (let i = 0; i < filterItems.length; i++) {
-
-    if (selectedValue === "all") {
-      filterItems[i].classList.add("active");
-    } else if (selectedValue === filterItems[i].dataset.category) {
-      filterItems[i].classList.add("active");
-    } else {
-      filterItems[i].classList.remove("active");
+  for (let i = 0; i < count; i++) {
+    const star = document.createElement("span");
+    star.className = "s";
+    const size = Math.random() * 1.6 + 0.4;
+    star.style.width = size + "px";
+    star.style.height = size + "px";
+    star.style.left = Math.random() * 100 + "%";
+    star.style.top = Math.random() * 100 + "%";
+    star.style.opacity = Math.random() * 0.5 + 0.2;
+    if (!reducedMotion && Math.random() > 0.55) {
+      const dur = (Math.random() * 3 + 2).toFixed(2);
+      const delay = (Math.random() * 4).toFixed(2);
+      star.style.animation = `twinkle ${dur}s ease-in-out ${delay}s infinite`;
     }
+    // a few faintly gold stars
+    if (Math.random() > 0.9) star.style.background = "hsl(45,100%,80%)";
+    frag.appendChild(star);
+  }
+  host.appendChild(frag);
+})();
 
+
+/*
+ * live garden sync — reads the Quartz content index + RSS from garden.sugeesh.dev.
+ * The HTML already holds a snapshot, so this only upgrades it when the fetch works.
+ */
+const isNote = slug => slug !== "index" && !slug.endsWith("/index") && !slug.startsWith("tags/");
+const sectionOf = slug => slug.split("/")[0];
+
+const renderStats = function (index) {
+  const notes = Object.keys(index).filter(isNote);
+  const counts = {};
+  notes.forEach(slug => { counts[sectionOf(slug)] = (counts[sectionOf(slug)] || 0) + 1; });
+
+  const set = (sel, n) => document.querySelectorAll(sel).forEach(el => { el.textContent = n; });
+  set('[data-stat="notes"]', notes.length);
+  set('[data-stat="study-sessions"]', counts["study-sessions"] || 0);
+  set('[data-stat="experiments"]', counts["experiments"] || 0);
+  Object.keys(SECTION_NAMES).forEach(sec => set(`[data-count="${sec}"]`, counts[sec] || 0));
+};
+
+// A note's own "Date - dd/mm/yyyy" line (study sessions have one) is when it was written.
+const writtenDate = function (content) {
+  const m = /^\s*Date\s*-\s*(\d{1,2})\/(\d{1,2})\/(\d{4})/.exec(content || "");
+  return m ? new Date(+m[3], m[2] - 1, +m[1]) : null;
+};
+
+const firstSentence = text => (text || "").replace(/^\s*Date\s*-\s*[\d/]+\s*/, "").split(/(?<=[.!?])\s/)[0];
+
+// RSS dates are last-modified dates, so renames and small edits look "new".
+// Prefer the written date when a note has one, and leave the Library link lists out.
+const renderFeed = function (index, xmlText) {
+  const rss = new Map();
+  if (xmlText) {
+    const doc = new DOMParser().parseFromString(xmlText, "application/xml");
+    doc.querySelectorAll("item").forEach(item => {
+      const link = item.querySelector("link")?.textContent.trim();
+      if (!link || link.endsWith("/")) return;
+      rss.set(decodeURIComponent(new URL(link).pathname.slice(1)), {
+        title: item.querySelector("title")?.textContent.trim(),
+        text: item.querySelector("description")?.textContent.trim(),
+        date: new Date(item.querySelector("pubDate")?.textContent)
+      });
+    });
   }
 
-}
+  const source = index
+    ? Object.entries(index).map(([slug, note]) => ({ slug, title: note.title, content: note.content }))
+    : [...rss].map(([slug, it]) => ({ slug, title: it.title, content: it.text }));
 
-// add event in all filter button items for large screen
-let lastClickedBtn = filterBtn[0];
+  const items = source
+    .filter(n => isNote(n.slug) && sectionOf(n.slug) !== "library")
+    .map(n => {
+      const written = writtenDate(n.content);
+      const updated = rss.get(n.slug)?.date;
+      return {
+        slug: n.slug,
+        title: n.title,
+        text: firstSentence(rss.get(n.slug)?.text || n.content),
+        date: written || (updated && !isNaN(updated) ? updated : null),
+        isWritten: Boolean(written)
+      };
+    })
+    .filter(it => it.date)
+    .sort((x, y) => y.date - x.date)
+    .slice(0, 6);
 
-for (let i = 0; i < filterBtn.length; i++) {
+  if (!items.length) return;
 
-  filterBtn[i].addEventListener("click", function () {
+  const list = document.querySelector("[data-garden-feed]");
+  list.replaceChildren(...items.map(it => {
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    a.className = "feed-item";
+    a.href = GARDEN_URL + "/" + it.slug;
 
-    let selectedValue = this.innerText.toLowerCase();
-    selectValue.innerText = this.innerText;
-    filterFunc(selectedValue);
+    const section = document.createElement("span");
+    section.className = "feed-section";
+    section.textContent = (SECTION_NAMES[sectionOf(it.slug)] || "Garden") + " · " +
+      (it.isWritten ? "" : "updated ") +
+      it.date.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 
-    lastClickedBtn.classList.remove("active");
-    this.classList.add("active");
-    lastClickedBtn = this;
+    const title = document.createElement("span");
+    title.className = "feed-title";
+    title.textContent = it.title;
 
-  });
+    const text = document.createElement("span");
+    text.className = "feed-text";
+    text.textContent = it.text;
 
-}
+    a.append(section, title, text);
+    li.append(a);
+    return li;
+  }));
+};
 
+const syncGarden = async function () {
+  const state = document.querySelector("[data-sync-state]");
+  const get = (path, as) => fetch(GARDEN_URL + path).then(r => (r.ok ? r[as]() : null)).catch(() => null);
 
+  const [index, xmlText] = await Promise.all([
+    get("/static/contentIndex.json", "json"),
+    get("/index.xml", "text")
+  ]);
 
-// contact form variables
-const form = document.querySelector("[data-form]");
-const formInputs = document.querySelectorAll("[data-form-input]");
-const formBtn = document.querySelector("[data-form-btn]");
+  // offline or garden unreachable: keep the snapshot already in the page
+  if (!index && !xmlText) return;
 
-// add event to all form input field
-for (let i = 0; i < formInputs.length; i++) {
-  formInputs[i].addEventListener("input", function () {
+  if (index) renderStats(index);
+  renderFeed(index, xmlText);
+  state.textContent = "Live from the garden";
+  state.classList.add("live");
+};
 
-    // check form validation
-    if (form.checkValidity()) {
-      formBtn.removeAttribute("disabled");
-    } else {
-      formBtn.setAttribute("disabled", "");
-    }
-
-  });
-}
-
-
-
-// page navigation variables
-const navigationLinks = document.querySelectorAll("[data-nav-link]");
-const pages = document.querySelectorAll("[data-page]");
-
-// add event to all nav link
-for (let i = 0; i < navigationLinks.length; i++) {
-  navigationLinks[i].addEventListener("click", function () {
-
-    for (let i = 0; i < pages.length; i++) {
-      if (this.innerHTML.toLowerCase() === pages[i].dataset.page) {
-        pages[i].classList.add("active");
-        navigationLinks[i].classList.add("active");
-        window.scrollTo(0, 0);
-      } else {
-        pages[i].classList.remove("active");
-        navigationLinks[i].classList.remove("active");
-      }
-    }
-
-  });
-}
+syncGarden();
