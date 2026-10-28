@@ -159,13 +159,13 @@
           <p>
             After leaving my Associate Director role, I've had the time to learn AI properly:
             real systems, real practice, no shortcuts. With a small study group I've gone from micrograd and
-            makemore through RAG and hybrid search to LangChain agents and MCP, testing
-            everything on my homelab.
+            makemore through RAG and hybrid search to LangChain agents, MCP, and evaluating and
+            monitoring agents with LangSmith, testing everything on my homelab.
           </p>
           <ul class="stat-row" data-garden-stats>
-            <li><strong data-stat="study-sessions">9</strong><span>study sessions</span></li>
-            <li><strong data-stat="experiments">6</strong><span>experiments</span></li>
-            <li><strong data-stat="notes">21</strong><span>garden notes</span></li>
+            <li><strong data-stat="study-sessions">12</strong><span>study sessions</span></li>
+            <li><strong data-stat="experiments">7</strong><span>experiments</span></li>
+            <li><strong data-stat="notes">25</strong><span>garden notes</span></li>
           </ul>
           <button class="saber-btn" data-nav-link="holocron">Open the Holocron <ion-icon name="arrow-forward"></ion-icon></button>
         </section>
@@ -212,7 +212,7 @@
               <div class="service-icon-box"><ion-icon name="sparkles-outline"></ion-icon></div>
               <div>
                 <h4 class="service-item-title">AI Systems <span class="state grow">in training</span></h4>
-                <p class="service-item-text">Language-model fundamentals, RAG and hybrid search, LangChain agents, MCP, and local LLMs.</p>
+                <p class="service-item-text">Language-model fundamentals, RAG and hybrid search, LangChain agents, MCP, agent evaluation and monitoring, and local LLMs.</p>
               </div>
             </li>
             <li class="service-item">
@@ -229,7 +229,7 @@
           <h3 class="section-title">Technologies</h3>
           <ul class="tech-list">
             <li>Java</li><li>Kotlin</li><li>Spring Boot</li><li>Python</li>
-            <li>LangChain</li><li>MCP</li><li>Postgres + pgvector</li><li>Redis</li>
+            <li>LangChain</li><li>LangSmith</li><li>MCP</li><li>Postgres + pgvector</li><li>Redis</li>
             <li>Docker</li><li>Ollama</li><li>Cloudflare</li><li>AWS</li><li>Proxmox</li>
           </ul>
         </section>
@@ -256,6 +256,26 @@
         <section>
           <h3 class="section-title">Latest transmissions</h3>
           <ol class="feed" data-garden-feed>
+            <li><a class="feed-item" href="https://garden.sugeesh.dev/experiments/teaching-an-ai-to-play-slither.io">
+              <span class="feed-section">Experiments</span>
+              <span class="feed-title">Teaching an AI to Play Slither.io: Fast Reflexes vs. Smart Thinking</span>
+              <span class="feed-text">gm-autoplayer plays slither.io from screenshots alone: an LLM sets the plan, and fast typed questions handle the reflexes.</span>
+            </a></li>
+            <li><a class="feed-item" href="https://garden.sugeesh.dev/study-sessions/ai-study-sessions-—-session-twelve">
+              <span class="feed-section">Study Sessions · 13 Oct 2026</span>
+              <span class="feed-title">AI Study Sessions — Session Twelve</span>
+              <span class="feed-text">Production monitoring in LangSmith: where an agent's cost comes from, and how to watch its quality once real users arrive.</span>
+            </a></li>
+            <li><a class="feed-item" href="https://garden.sugeesh.dev/study-sessions/ai-study-sessions-—-session-eleven">
+              <span class="feed-section">Study Sessions · 9 Oct 2026</span>
+              <span class="feed-title">AI Study Sessions — Session Eleven</span>
+              <span class="feed-text">Why agents are harder to test than software, and testing them anyway with datasets, evaluators, and LLM judges.</span>
+            </a></li>
+            <li><a class="feed-item" href="https://garden.sugeesh.dev/study-sessions/ai-study-sessions-—-session-ten">
+              <span class="feed-section">Study Sessions · 5 Oct 2026</span>
+              <span class="feed-title">AI Study Sessions — Session Ten</span>
+              <span class="feed-text">Inside the agent loop: runtime context, state, subagents as tools, middleware, and a human in the loop.</span>
+            </a></li>
             <li><a class="feed-item" href="https://garden.sugeesh.dev/experiments/askholocron">
               <span class="feed-section">Experiments</span>
               <span class="feed-title">AskHolocron</span>
@@ -265,26 +285,6 @@
               <span class="feed-section">Study Sessions · 22 Sept 2026</span>
               <span class="feed-title">AI Study Sessions — Session Nine</span>
               <span class="feed-text">What happens when the tool stops being a function and becomes a service: the Model Context Protocol.</span>
-            </a></li>
-            <li><a class="feed-item" href="https://garden.sugeesh.dev/study-sessions/ai-study-sessions-—-session-eight">
-              <span class="feed-section">Study Sessions · 15 Sept 2026</span>
-              <span class="feed-title">AI Study Sessions — Session Eight</span>
-              <span class="feed-text">LangChain basics, then the agentic basics on top of them: messages, tools and the agent loop.</span>
-            </a></li>
-            <li><a class="feed-item" href="https://garden.sugeesh.dev/study-sessions/ai-study-sessions-—-session-seven">
-              <span class="feed-section">Study Sessions · 9 Sept 2026</span>
-              <span class="feed-title">AI Study Sessions — Session Seven</span>
-              <span class="feed-text">Rebuilding the index with Docling and PGVector, then hunting for queries where cosine similarity falls over.</span>
-            </a></li>
-            <li><a class="feed-item" href="https://garden.sugeesh.dev/random-thoughts/art-of-learning">
-              <span class="feed-section">Random Thoughts</span>
-              <span class="feed-title">Art of Learning</span>
-              <span class="feed-text">I think the most important thing for a successful knowledge worker is having a framework for learning.</span>
-            </a></li>
-            <li><a class="feed-item" href="https://garden.sugeesh.dev/experiments/wallpaper-rotator-for-ubuntu">
-              <span class="feed-section">Experiments</span>
-              <span class="feed-title">Wallpaper Rotator for Ubuntu</span>
-              <span class="feed-text">I wanted something simple: a new wallpaper on my Ubuntu desktop every day, picked from a folder of images I already had.</span>
             </a></li>
           </ol>
         </section>
@@ -299,12 +299,12 @@
             </a></li>
             <li><a class="sector" href="https://garden.sugeesh.dev/study-sessions/">
               <ion-icon name="school-outline"></ion-icon>
-              <h4>Study Sessions <span class="sector-count" data-count="study-sessions">9</span></h4>
+              <h4>Study Sessions <span class="sector-count" data-count="study-sessions">12</span></h4>
               <p>Weekly AI study sessions with a small group of engineers.</p>
             </a></li>
             <li><a class="sector" href="https://garden.sugeesh.dev/experiments/">
               <ion-icon name="flask-outline"></ion-icon>
-              <h4>Experiments <span class="sector-count" data-count="experiments">6</span></h4>
+              <h4>Experiments <span class="sector-count" data-count="experiments">7</span></h4>
               <p>Local LLMs, agents, homelab builds, and small tools.</p>
             </a></li>
             <li><a class="sector" href="https://garden.sugeesh.dev/library/">
@@ -340,14 +340,28 @@
         <ul class="mission-grid">
           <li class="mission">
             <div class="mission-head"><h4>AI Systems Study Group</h4><span class="state live">ongoing</span></div>
-            <p class="mission-sub">from micrograd to MCP, nine sessions in</p>
+            <p class="mission-sub">from micrograd to production monitoring, twelve sessions in</p>
             <p>
               A small group of engineers working up from the fundamentals: bigram models,
-              micrograd and makemore MLPs, then RAG and hybrid search, LangChain agents, and the
-              Model Context Protocol, alternating theory with small builds.
+              micrograd and makemore MLPs, then RAG and hybrid search, LangChain agents, the
+              Model Context Protocol, and testing and monitoring agents with LangSmith, alternating
+              theory with small builds.
             </p>
-            <p class="mission-stack">PyTorch / LangChain / Docling / pgvector / MCP</p>
+            <p class="mission-stack">PyTorch / LangChain / Docling / pgvector / MCP / LangSmith</p>
             <a class="mission-link" href="https://garden.sugeesh.dev/study-sessions/">see the sessions <ion-icon name="arrow-forward"></ion-icon></a>
+          </li>
+
+
+          <li class="mission">
+            <div class="mission-head"><h4>gm-autoplayer</h4><span class="state grow">in progress</span></div>
+            <p class="mission-sub">an agent that plays browser games</p>
+            <p>
+              Plays slither.io and 2048 from screenshots alone, no game APIs. An LLM strategist sets
+              the plan every couple of seconds while fast, typed questions about each frame handle
+              the reflexes, so every move can be traced back to the rule that fired.
+            </p>
+            <p class="mission-stack">GPT-4.1 mini / Jev / Playwright MCP / TOML game configs</p>
+            <a class="mission-link" href="https://garden.sugeesh.dev/experiments/teaching-an-ai-to-play-slither.io">fast reflexes vs. smart thinking <ion-icon name="arrow-forward"></ion-icon></a>
           </li>
 
           <li class="mission">
@@ -373,17 +387,6 @@
             </p>
             <p class="mission-stack">Node.js / WebSocket / REST / Discord bot</p>
             <a class="mission-link" href="https://github.com/sugeesh/nuruodo_chess">source <ion-icon name="arrow-forward"></ion-icon></a>
-          </li>
-
-          <li class="mission">
-            <div class="mission-head"><h4>sg-wallpaper-rotator</h4><span class="state done">finished</span></div>
-            <p class="mission-sub">a new wallpaper every day</p>
-            <p>
-              A tiny GNOME wallpaper rotator with a top-bar icon, built with AI in less time than it
-              would have taken to find and test an existing app.
-            </p>
-            <p class="mission-stack">Bash / gsettings / GNOME</p>
-            <a class="mission-link" href="https://garden.sugeesh.dev/experiments/wallpaper-rotator-for-ubuntu">how it works <ion-icon name="arrow-forward"></ion-icon></a>
           </li>
         </ul>
 
@@ -490,7 +493,7 @@
               <span class="timeline-date">Aug 2026 — Present</span>
               <p class="timeline-text">
                 • Studying AI engineering from first principles<br>
-                • Running a weekly AI systems study group: nine sessions from micrograd to MCP<br>
+                • Running a weekly AI systems study group: twelve sessions from micrograd to production monitoring<br>
                 • Building RAG apps, local LLMs, and agents on a self-hosted homelab<br>
                 • Completed LangChain Academy and passed the LangChain Certified Agent Engineer exam
               </p>
