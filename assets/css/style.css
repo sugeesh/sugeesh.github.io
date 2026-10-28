@@ -277,7 +277,7 @@ main { margin: 16px 16px 90px; min-width: 0; }
 .sidebar {
   padding: 16px;
   margin-bottom: 16px;
-  max-height: 124px;
+  max-height: 152px;
   overflow: hidden;
   transition: max-height 0.5s ease-in-out;
 }
@@ -317,6 +317,31 @@ main { margin: 16px 16px 90px; min-width: 0; }
 }
 
 .title-arrow { color: var(--gold-1); }
+
+.cert-badge {
+  display: flex;
+  width: max-content;
+  max-width: 100%;
+  align-items: center;
+  gap: 5px;
+  margin-top: 6px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  color: var(--gold-1);
+  background: hsla(42, 100%, 55%, 0.12);
+  border: 1px solid hsla(42, 100%, 55%, 0.3);
+  font-family: var(--ff-mono);
+  font-size: 10.5px;
+  line-height: 1.4;
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.cert-badge ion-icon { flex-shrink: 0; font-size: 13px; }
+
+/* phones only have room for "LangChain Certified" */
+.cert-badge-long { display: none; }
+
+.cert-badge:hover { background: hsla(42, 100%, 55%, 0.2); border-color: var(--gold-2); }
 
 .info_more-btn {
   position: absolute;
@@ -714,6 +739,21 @@ main { margin: 16px 16px 90px; min-width: 0; }
 
 .timeline-text { font-size: 14px; color: var(--muted); }
 
+/* the certificate image takes the width of the bullet line above it */
+.cert-fit { display: inline-block; }
+
+.cert-link { display: block; margin-top: 10px; }
+
+.cert-img {
+  width: 0;
+  min-width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  transition: border-color var(--transition), transform var(--transition);
+}
+
+.cert-link:hover .cert-img { border-color: var(--gold-2); transform: translateY(-2px); }
+
 .skills { margin-top: 8px; color: var(--faint); font-family: var(--ff-mono); font-size: 11px; }
 
 
@@ -812,6 +852,7 @@ main { margin: 16px 16px 90px; min-width: 0; }
   .name { font-size: 22px; }
   .info_more-btn { top: -26px; right: -26px; padding: 10px 15px; }
   .info_more-btn span { display: block; font-size: 12px; }
+  .cert-badge-long { display: inline; }
 
   .page { padding: 30px; }
   .article-title { font-size: 36px; }
@@ -884,6 +925,7 @@ main { margin: 16px 16px 90px; min-width: 0; }
   .sidebar.active { max-height: max-content; }
 
   .sidebar-info { flex-direction: column; text-align: center; }
+  .cert-badge { margin-inline: auto; }
   .avatar-box img { width: 140px; }
   .name { font-size: 20px; }
   .info_more-btn { display: none; }
